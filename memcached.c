@@ -10,6 +10,9 @@ int main(int argc, char **argv) {
   char *key = "keystring";
   char *value = "keyvalue";
 
+  char *retrieved_value;
+  size_t *value_length;
+
   memc = memcached_create(NULL);
   servers = memcached_server_list_append(servers, "localhost", 11211, &rc);
   rc = memcached_server_push(memc, servers);
@@ -25,6 +28,16 @@ int main(int argc, char **argv) {
     fprintf(stderr, "Key stored successfully\n");
   else
     fprintf(stderr, "Couldn't store key: %s\n", memcached_strerror(memc, rc));
+
+  retrieved_value = memcached_get(memc, key, strlen(key), value_length, flags, rc);
+
+  if (rc == MEMCACHED_SUCCESS) {
+    fprintf(stderr, "Key retrieved successfully\n");
+    printf("The key '%s' returns value '%s'.", key, retrieved_value);
+    free(retrieved_value);
+  }
+  else
+    fprintf(stderr, "Couldn't retrieve key: %s\n", memcached_strerror(memc, rc));
 
   return 0;
 }
