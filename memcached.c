@@ -31,11 +31,11 @@ int main(int argc, char **argv) {
     fprintf(stderr, "Couldn't store key: %s\n", memcached_strerror(memc, rc));
 
   retrieved_value = memcached_get(memc, key, strlen(key), &value_length, &flags, &rc);
-  printf("Yay!");
+  printf("Yay!\n");
 
   if (rc == MEMCACHED_SUCCESS) {
     fprintf(stderr, "Key retrieved successfully\n");
-    printf("The key '%s' returned value '%s'.", key, retrieved_value);
+    printf("The key '%s' returned value '%s'.\n", key, retrieved_value);
     free(retrieved_value);
   }
   else
