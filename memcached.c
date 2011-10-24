@@ -11,7 +11,8 @@ int main(int argc, char **argv) {
   char *value = "keyvalue";
 
   char *retrieved_value;
-  size_t *value_length;
+  size_t value_length;
+  uint32_t flags;
 
   memc = memcached_create(NULL);
   servers = memcached_server_list_append(servers, "localhost", 11211, &rc);
@@ -29,11 +30,12 @@ int main(int argc, char **argv) {
   else
     fprintf(stderr, "Couldn't store key: %s\n", memcached_strerror(memc, rc));
 
-  retrieved_value = memcached_get(memc, key, strlen(key), value_length, flags, rc);
+  retrieved_value = memcached_get(memc, key, strlen(key), &value_length, &flags, &rc);
+  printf("Yay!");
 
   if (rc == MEMCACHED_SUCCESS) {
     fprintf(stderr, "Key retrieved successfully\n");
-    printf("The key '%s' returns value '%s'.", key, retrieved_value);
+    printf("The key '%s' returned value '%s'.", key, retrieved_value);
     free(retrieved_value);
   }
   else
